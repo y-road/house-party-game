@@ -91,6 +91,13 @@ try {
   // 선택의 시간: 플레이어는 관리자 명령 불가, 공개 힌트는 관리자에게만
   await call(admin, EVT.ADMIN_CHOICE_TIME);
   assert.equal((await call(p1b, EVT.ADMIN_REVEAL, 1)).reason, 'NOT_ADMIN');
+  // 선물타임으로 되돌렸다가 다시 선택의 시간으로
+  assert.equal((await call(p1b, EVT.ADMIN_BACK_TO_GIFT)).reason, 'NOT_ADMIN');
+  assert.ok((await call(admin, EVT.ADMIN_BACK_TO_GIFT)).ok);
+  await wait(30);
+  assert.equal(admin.latest.phase, PHASE.GIFT_TIME);
+  assert.equal(p1b.latest.me.openedCards.length, opened, '되돌려도 열어 본 카드 기록은 유지');
+  assert.ok((await call(admin, EVT.ADMIN_CHOICE_TIME)).ok);
   for (let no = 1; no <= 9; no++) {
     assert.ok((await call(admin, EVT.ADMIN_REVEAL, no)).ok);
     await wait(20);
@@ -102,6 +109,18 @@ try {
   assert.equal(admin.latest.phase, PHASE.FINISHED);
   assert.equal(admin.latest.admin.lastGiven.no, 9);
   assert.ok(admin.latest.admin.lastGiven.name.length > 0);
+
+  // 게임 다시 시작: 로비로, 접속자·캐릭터 유지, 힌트·카드 초기화
+  assert.equal((await call(p1b, EVT.ADMIN_RESTART)).reason, 'NOT_ADMIN');
+  assert.ok((await call(admin, EVT.ADMIN_RESTART)).ok);
+  await wait(50);
+  assert.equal(admin.latest.phase, PHASE.LOBBY);
+  assert.equal(admin.latest.admin.canStart, true);
+  assert.equal(p1b.latest.me.hintItems, 0);
+  assert.equal(p1b.latest.me.openedCards.length, 0);
+  assert.ok(p1b.latest.cards.every((c) => c === 'hidden'));
+  assert.equal(admin.latest.round, 0);
+  assert.ok((await call(admin, EVT.ADMIN_START)).ok, '다시 시작 후 새 게임 가능');
   console.log('SMOKE TEST PASSED');
 } catch (e) {
   console.error('SMOKE TEST FAILED:', e.message);

@@ -4,6 +4,9 @@ import { EVT, PHASE, MAX_PLAYERS, RACE, hintItemsForRank } from '../../../shared
 import { createIslandScene } from '../three/islandScene.js';
 import { createRaceScene } from '../three/raceScene.js';
 import { createPodiumScene } from '../three/podiumScene.js';
+import { installTapSound, playForBigText } from '../audio.js';
+
+installTapSound();
 import { PHASE_LABEL, ISLAND_PHASES } from '../phaseLabels.js';
 
 // 관리자 대형 화면이 레이스 장면을 보여 주는 단계 (시상대 전까지 같은 트랙을 유지한다)
@@ -230,6 +233,7 @@ function renderGifts() {
 function showBig(text, ms = 0) {
   clearTimeout(goTimer);
   bigEl.textContent = text;
+  playForBigText(text);
   bigEl.classList.remove('pulse');
   void bigEl.offsetWidth;
   bigEl.classList.add('pulse');
@@ -305,7 +309,18 @@ function renderControls() {
       panel.note.textContent = '플레이어들이 폰에서 카드를 열어 힌트를 보고 있어요.';
       break;
     case PHASE.CHOICE_TIME:
+      c.append(button('⬅ 선물타임으로 돌아가기', 'sub', () => run(EVT.ADMIN_BACK_TO_GIFT)));
       panel.note.textContent = '아래 카드를 눌러 힌트를 공개하고, 선물을 전하면 [증정 완료]를 눌러요.';
+      break;
+    case PHASE.FINISHED:
+      c.append(
+        button('🔁 게임 다시 시작', 'go', () => {
+          if (confirm('처음(로비)부터 다시 시작할까요?\n순위·힌트 아이템·열린 카드가 모두 초기화돼요. (접속자와 캐릭터는 유지)')) {
+            run(EVT.ADMIN_RESTART);
+          }
+        }),
+      );
+      panel.note.textContent = '모든 선물 증정이 끝났어요. 다시 하려면 위 버튼을 눌러요.';
       break;
     default:
       break;

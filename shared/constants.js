@@ -41,6 +41,8 @@ export const EVT = Object.freeze({
   ADMIN_TO_VILLAGE: 'admin:toVillage',
   ADMIN_GIFT_TIME: 'admin:giftTime',
   ADMIN_CHOICE_TIME: 'admin:choiceTime',
+  ADMIN_BACK_TO_GIFT: 'admin:backToGift', // 선택의 시간 → 선물타임으로 되돌리기
+  ADMIN_RESTART: 'admin:restart', // 모든 증정 후 처음(로비)부터 다시
   ADMIN_REVEAL: 'admin:reveal',
   ADMIN_CONFIRM_GIFT: 'admin:confirmGift',
   ADMIN_DEV_SKIP_RACE: 'admin:devSkipRace', // 개발 환경 전용

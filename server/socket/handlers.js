@@ -120,6 +120,8 @@ export function registerHandlers(io) {
     adminAction(EVT.ADMIN_TO_VILLAGE, () => phases.toVillage());
     adminAction(EVT.ADMIN_GIFT_TIME, () => phases.giftTime());
     adminAction(EVT.ADMIN_CHOICE_TIME, () => phases.choiceTime());
+    adminAction(EVT.ADMIN_BACK_TO_GIFT, () => phases.backToGift());
+    adminAction(EVT.ADMIN_RESTART, () => phases.restartGame());
     adminAction(EVT.ADMIN_REVEAL, (no) => phases.revealCard(no));
     adminAction(EVT.ADMIN_CONFIRM_GIFT, (no) => phases.confirmGift(no));
     if (IS_DEV) adminAction(EVT.ADMIN_DEV_SKIP_RACE, () => phases.devSkipRace());

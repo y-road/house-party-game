@@ -66,6 +66,11 @@ function spawnPoint() {
   return { x: Math.cos(angle) * r, z: Math.sin(angle) * r };
 }
 
+export function resetLobbyPosition(p) {
+  const spawn = spawnPoint();
+  p.lobby = { x: spawn.x, z: spawn.z, targetX: spawn.x, targetZ: spawn.z };
+}
+
 function newPlayer({ nickname, socketId = null, isBot = false }) {
   const spawn = spawnPoint();
   return {

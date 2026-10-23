@@ -5,6 +5,8 @@ import { createRaceScene } from '../three/raceScene.js';
 const DOT_COLORS = ['#ff6b81', '#ff9f43', '#ffd93d', '#6bcb77', '#40c4c4', '#4d96ff', '#9b72ff', '#ff8fd0', '#8a7a6a'];
 const TAP_FLUSH_MS = 50;
 
+import { playForBigText } from '../audio.js';
+
 function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -97,6 +99,7 @@ export function createRaceView(container, initial) {
   function showBig(text, ms = 0) {
     clearTimeout(goTimer);
     big.textContent = text;
+    playForBigText(text);
     big.classList.remove('pulse');
     void big.offsetWidth; // 애니메이션 다시 재생
     big.classList.add('pulse');

@@ -1,5 +1,5 @@
 import { PHASE, RACE, EVT, GIFT_COUNT, hintItemsForRank } from '../../shared/constants.js';
-import { state, canStart, freshRaceState } from './state.js';
+import { state, canStart, freshRaceState, resetLobbyPosition } from './state.js';
 import { syncAll, emitAll } from './broadcast.js';
 import { startRace, stopRace } from './race.js';
 import { nameOf } from '../data/hints.js';
@@ -71,6 +71,34 @@ export function choiceTime() {
   state.gift.revealed = null;
   state.gift.lastGiven = null;
   setPhase(PHASE.CHOICE_TIME);
+  return { ok: true };
+}
+
+/** 선택의 시간에서 선물타임으로 돌아간다. 이미 증정된 카드와 플레이어의 힌트 기록은 그대로 유지된다. */
+export function backToGift() {
+  if (state.phase !== PHASE.CHOICE_TIME) return fail('WRONG_PHASE');
+  state.gift.revealed = null;
+  state.gift.lastGiven = null;
+  setPhase(PHASE.GIFT_TIME);
+  return { ok: true };
+}
+
+/** 증정이 모두 끝난 뒤 처음부터 다시: 접속자와 캐릭터는 유지하고 순위·힌트·카드는 초기화한다. */
+export function restartGame() {
+  if (state.phase !== PHASE.FINISHED) return fail('WRONG_PHASE');
+  clearTimeout(countdownTimer);
+  stopRace();
+  state.gift.cards = Array.from({ length: GIFT_COUNT }, () => 'hidden');
+  state.gift.revealed = null;
+  state.gift.lastGiven = null;
+  state.race = { round: 0, startedAt: null, results: [] };
+  for (const p of state.players.values()) {
+    p.hintItems = 0;
+    p.openedCards.clear();
+    p.race = freshRaceState();
+    resetLobbyPosition(p);
+  }
+  setPhase(PHASE.LOBBY);
   return { ok: true };
 }
 

@@ -8,6 +8,9 @@ import { createAvatarPreview } from '../three/preview.js';
 import { createIslandScene } from '../three/islandScene.js';
 import { createRaceView } from './race.js';
 import { createGiftView } from './gifts.js';
+import { installTapSound } from '../audio.js';
+
+installTapSound();
 import { PHASE_LABEL, ISLAND_PHASES, RACE_PHASES, GIFT_PHASES } from '../phaseLabels.js';
 
 const TOKEN_KEY = 'hpg_token';
