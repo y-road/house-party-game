@@ -1,0 +1,17 @@
+# Render Blueprint: 집들이 레이스 (서버 1대, 게임 상태는 메모리에만 보관)
+services:
+  - type: web
+    name: house-party-game
+    runtime: node
+    region: singapore
+    plan: starter        # 무료 플랜은 15분 유휴 시 잠들어서 게임 중 상태가 사라질 수 있음
+    numInstances: 1      # 메모리 상태를 쓰므로 반드시 1대 (늘리면 게임이 깨짐)
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
