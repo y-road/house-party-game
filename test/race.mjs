@@ -85,9 +85,9 @@ try {
   for (let i = 1; i < timed.length; i++) assert.ok(timed[i].time >= timed[i - 1].time);
   console.log('ranks/time:', results.map((r) => `${r.rank}:${r.time}`).join(' '));
 
-  // 사람(초당 7회)의 기록은 튜닝값(약 15초) 근처
+  // 사람(초당 7회)의 기록은 튜닝값(약 30초) 근처
   const myRes = results.find((r) => r.id === admin.latest.players.find((p) => p.nickname === '영유').id);
-  assert.ok(myRes.time > 12 && myRes.time < 19, `내 기록 ${myRes.time}초가 예상 범위를 벗어남`);
+  assert.ok(myRes.time > 25 && myRes.time < 36, `내 기록 ${myRes.time}초가 예상 범위를 벗어남`);
   console.log('my time:', myRes.time, 'rank', myRes.rank);
 
   // 도착 이벤트는 순위 순서로 전달
@@ -102,7 +102,7 @@ try {
   while (admin.latest.phase === PHASE.RACING && Date.now() - t1 < 60000) await wait(100);
   stopSpam();
   const spamRes = admin.result.results.find((r) => r.id === myRes.id);
-  const minPossible = 7.5; // 초당 14회 상한으로 낼 수 있는 최단 기록 (튜닝 스크립트 기준 약 7.9초)
+  const minPossible = 15.0; // 초당 14회 상한으로 낼 수 있는 최단 기록 (튜닝 스크립트 기준 약 15.4초)
   assert.ok(spamRes.time >= minPossible, `오토클릭 상한이 무너짐: ${spamRes.time}초`);
   console.log('spam time (capped):', spamRes.time);
 

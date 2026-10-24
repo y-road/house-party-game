@@ -64,12 +64,12 @@ export const EVT = Object.freeze({
 export const RACE = Object.freeze({
   COUNTDOWN_SECONDS: 3,
   TICK_HZ: 20,
-  TRACK_LENGTH: 80, // scripts/tune-track.mjs로 확정 (평균 초당 7회 연타 ≈ 15초)
+  TRACK_LENGTH: 165, // scripts/tune-track.mjs로 확정 (평균 초당 7회 연타 ≈ 30초)
   MAX_TAPS_PER_SECOND: 14, // 오토클릭 방지 상한
   TAP_IMPULSE: 1.0,
   DRAG: 1.2,
   MAX_SPEED: 12,
-  FORCE_END_AFTER_SECONDS: 40, // 미도착자 거리순 확정까지의 안전장치
+  FORCE_END_AFTER_SECONDS: 80, // 미도착자 거리순 확정까지의 안전장치
 });
 
 // 로비 섬 (원형). 단위는 월드 좌표.
